@@ -1,10 +1,16 @@
-var pointLight, sun, moon, earth, earthOrbit, ring, controls, scene, camera, renderer, scene;
-var planetSegments = 48;
-var earthData = constructPlanetData(365.2564, 0.015, 25, "earth", "img/earth.jpg", 1, planetSegments);
-var moonData = constructPlanetData(29.5, 0.01, 2.8, "moon", "img/moon.jpg", 0.5, planetSegments);
+var pointLight, sun, moon, mercury, mercuryOrbit, venus, venusOrbit, earth, earthOrbit, mars, marsOrbit, ring, controls, scene, camera, renderer, scene;
+const planetSegments = 48; //количество сегментов(треугольников)
+//Земля
+var earthData = constructPlanetData(365.2564, 0.01, 75, "earth", "img/earth.jpg", 5, planetSegments);
+//Луна
+var moonData = constructPlanetData(29.5, 0.01, 7, "moon", "img/moon.jpg", 1, planetSegments);
+//Меркурий
+var mercuryData = constructPlanetData(87.969, 0.008, 25, "mercury", "img/mercurymap.jpg", 2, planetSegments);
+//Венера
+var venusData = constructPlanetData(224.7, 0.003, 50, "venus", "img/venusmap.jpg", 4, planetSegments);
+//Марс
+var marsData = constructPlanetData(686.94, 0.0108, 112, "mars", "img/marsmap.jpg", 2.5, planetSegments);
 var orbitData = {value: 200, runOrbit: true, runRotation: true};
-//объект для отслеживания времени
-var clock = new THREE.Clock();
 
 /**
  * Конструктор позволяет не вводить имена свойств для объекта планеты для каждой отдельной планеты
@@ -19,13 +25,13 @@ var clock = new THREE.Clock();
  */
 function constructPlanetData(myOrbitRate, myRotationRate, myDistanceFromAxis, myName, myTexture, mySize, mySegments) {
     return {
-        orbitRate: myOrbitRate
-        , rotationRate: myRotationRate
-        , distanceFromAxis: myDistanceFromAxis
-        , name: myName
-        , texture: myTexture
-        , size: mySize
-        , segments: mySegments
+        orbitRate: myOrbitRate, //период обращения вокруг солнца
+        rotationRate: myRotationRate, //скорость вращения вокруг своей оси
+        distanceFromAxis: myDistanceFromAxis, //расстояние от солнца
+        name: myName, //имя планеты
+        texture: myTexture, //загружаемая текстура
+        size: mySize, //размер планеты
+        segments: mySegments //количество сегментов
     };
 }
 
@@ -117,14 +123,35 @@ function getMaterial(type, color, myTexture) {
  */
 function createVisibleOrbits() {
     //ширина орбиты
-    var orbitWidth = 0.02;
+    var orbitWidth = 0.05;
     //орбита Земли
-    earthOrbit = getRing(earthData.distanceFromAxis + orbitWidth
-        , earthData.distanceFromAxis - orbitWidth
-        , 320
-        , 0xffffff
-        , "earthOrbit"
-        , 0);
+    earthOrbit = getRing(earthData.distanceFromAxis + orbitWidth,
+        earthData.distanceFromAxis - orbitWidth,
+        320,
+        0xffffff,
+        "earthOrbit",
+        0);
+    //орбита Меркурия
+    mercuryOrbit = getRing(mercuryData.distanceFromAxis + orbitWidth,
+        mercuryData.distanceFromAxis - orbitWidth,
+        320,
+        0xffffff,
+        "mercuryOrbit",
+        0);
+    //орбита Венеры
+    mercuryOrbit = getRing(venusData.distanceFromAxis + orbitWidth,
+        venusData.distanceFromAxis - orbitWidth,
+        320,
+        0xffffff,
+        "venusOrbit",
+        0);
+    //орбита Марса
+    mercuryOrbit = getRing(marsData.distanceFromAxis + orbitWidth,
+        marsData.distanceFromAxis - orbitWidth,
+        320,
+        0xffffff,
+        "marsOrbit",
+        0);
 }
 
 /**
@@ -258,8 +285,14 @@ function update(renderer, scene, camera, controls) {
     movePlanet(earth, earthData, time);
     //синхронное движение кольца по орбите
     movePlanet(ring, earthData, time, true);
-    //передвижение луны
+    //передвижение Луны
     moveMoon(moon, earth, moonData, time);
+    //передвижение Меркурия
+    movePlanet(mercury, mercuryData, time);
+    //передвижение Венеры
+    movePlanet(venus, venusData, time);
+    //передвижение Марса
+    movePlanet(mars, marsData, time);
 
     //рендер сцены
     renderer.render(scene, camera);
@@ -342,9 +375,16 @@ function init() {
     sprite.scale.set(70, 70, 1.0);
     sun.add(sprite);
 
-    //Создание Земли, Луны и кольца вокруг Земли.
+    //Создание Земли
     earth = loadTexturedPlanet(earthData, earthData.distanceFromAxis, 0, 0);
+    //Создание Луны
     moon = loadTexturedPlanet(moonData, moonData.distanceFromAxis, 0, 0);
+    //Создание Меркурия
+    mercury = loadTexturedPlanet(mercuryData, mercuryData.distanceFromAxis, 0, 0);
+    //Создание Венеры
+    venus = loadTexturedPlanet(venusData, venusData.distanceFromAxis, 0, 0);
+    //Создание Марса
+    mars = loadTexturedPlanet(marsData, marsData.distanceFromAxis, 0, 0);
     ring = getTube(1.8, 0.05, 480, 0x757064, "ring", earthData.distanceFromAxis);
 
     //Создание видимой орбиты Земли
