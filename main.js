@@ -69,13 +69,13 @@ var visibleOrbit={
 
 /**
  * Конструктор позволяет не вводить имена свойств для объекта планеты для каждой отдельной планеты
- * @param {type} myOrbitRate decimal
- * @param {type} myRotationRate decimal
- * @param {type} myDistanceFromAxis decimal
- * @param {type} myName string
- * @param {type} myTexture image file path
- * @param {type} mySize decimal
- * @param {type} mySegments integer
+ * @param {number} myOrbitRate
+ * @param {number} myRotationRate
+ * @param {number} myDistanceFromAxis
+ * @param {string} myName
+ * @param {string} myTexture
+ * @param {number} mySize
+ * @param {number} mySegments
  * @returns {constructPlanetData.mainAnonym$0}
  */
 function constructPlanetData(myOrbitRate, myRotationRate, myDistanceFromAxis, myName, myTexture, mySize, mySegments) {
@@ -92,12 +92,12 @@ function constructPlanetData(myOrbitRate, myRotationRate, myDistanceFromAxis, my
 
 /**
  * Используется для создания кольца Сатурна и Урана.
- * @param {type} size decimal
- * @param {type} innerDiameter decimal
- * @param {type} facets integer
- * @param {type} myColor HTML color
- * @param {type} name string
- * @param {type} distanceFromAxis decimal
+ * @param {number} size
+ * @param {number} innerDiameter
+ * @param {number} facets
+ * @param {color} myColor
+ * @param {type} name
+ * @param {number} distanceFromAxis
  * @returns {THREE.Mesh|myRing}
  */
 function getPlanetRing(size, innerDiameter, facets, myColor, name, distanceFromAxis, texture=null, mySide=THREE.DoubleSide, myTransparent=false, myOpacity=1) {
@@ -130,7 +130,7 @@ function getOrbit(distanceFromAxis, positionX, positionZ, myColor, name) {
     //геометрия орбиты
     var orbit_geometry = new THREE.CircleGeometry(distanceFromAxis, 64, 0, 6.3);
     orbit_geometry.vertices[0]['x'] = distanceFromAxis;
-    //текстура орбиты
+    //материал орбиты
     var orbit_material = new THREE.LineBasicMaterial(  { color: myColor, linewidth: 1 } );
     var orbit = new THREE.Line( orbit_geometry, orbit_material );
     //имя орбиты
@@ -146,9 +146,9 @@ function getOrbit(distanceFromAxis, positionX, positionZ, myColor, name) {
 
 /**
  * Создание материала(внешнего вида) для используемых объектов
- * @param {type} type
- * @param {type} color
- * @param {type} myTexture
+ * @param {string} type
+ * @param {color} color
+ * @param {string} myTexture
  * @returns {THREE.MeshStandardMaterial|THREE.MeshLambertMaterial|THREE.MeshPhongMaterial|THREE.MeshBasicMaterial}
  */
 function getMaterial(type, color, myTexture) {
@@ -175,7 +175,7 @@ function getMaterial(type, color, myTexture) {
 
 /**
  *  Рисует все орбиты, которые будут показаны на сцене
- * @returns {null}
+ * @returns {undefined}
  */
 function createVisibleOrbits() {
     //ширина орбиты
@@ -200,9 +200,9 @@ function createVisibleOrbits() {
 
 /**
  * Упрощает создание сферы
- * @param {type} material THREE.SOME_TYPE_OF_CONSTRUCTED_MATERIAL
- * @param {type} size decimal
- * @param {type} segments integer
+ * @param {THREE.SOME_TYPE_OF_CONSTRUCTED_MATERIAL} material
+ * @param {number} size
+ * @param {number} segments
  * @returns {getSphere.obj|THREE.Mesh}
  */
 function getSphere(material, size, segments) {
@@ -218,11 +218,11 @@ function getSphere(material, size, segments) {
 
 /**
  * Создание планеты и добавление её на сцену
- * @param {type} myData data for a planet object
- * @param {type} x integer
- * @param {type} y integer
- * @param {type} z integer
- * @param {type} myMaterialType string that is passed to getMaterial()
+ * @param {object} myData
+ * @param {number} x
+ * @param {number} y
+ * @param {number} z
+ * @param {string} myMaterialType
  * @returns {getSphere.obj|THREE.Mesh|loadTexturedPlanet.myPlanet}
  */
 function loadTexturedPlanet(myData, x, y, z, myMaterialType) {
@@ -254,8 +254,8 @@ function loadTexturedPlanet(myData, x, y, z, myMaterialType) {
 
 /**
  * Упрощает создание света, который рассеивается во всех направлениях.
- * @param {type} intensity decimal
- * @param {type} color HTML color
+ * @param {number} intensity
+ * @param {color} color
  * @returns {THREE.PointLight|getPointLight.light}
  */
 function getPointLight(intensity, color) {
@@ -270,10 +270,10 @@ function getPointLight(intensity, color) {
 
 /**
  * Перемещение планеты по орбите и вращение вокруг оси
- * @param {type} myPlanet
- * @param {type} myData
- * @param {type} myTime
- * @param {type} stopRotation optional set to true for rings
+ * @param {object} myPlanet
+ * @param {object} myData
+ * @param {number} myTime
+ * @param {bool} stopRotation
  * @returns {undefined}
  */
 function movePlanet(myPlanet, myData, myTime, displacementX=0, displacementZ=0, stopRotation) {
@@ -297,10 +297,10 @@ function movePlanet(myPlanet, myData, myTime, displacementX=0, displacementZ=0, 
 
 /**
  * Движение Луны вокруг Земли и вращание вокруг своей оси
- * @param {type} myMoon
- * @param {type} myPlanet
- * @param {type} myData
- * @param {type} myTime
+ * @param {object} myMoon
+ * @param {object} myPlanet
+ * @param {object} myData
+ * @param {number} myTime
  * @returns {undefined}
  */
 function moveMoon(myMoon, myPlanet, myData, myTime) {
@@ -313,10 +313,10 @@ function moveMoon(myMoon, myPlanet, myData, myTime) {
 
 /**
  * Эта функция вызывается в цикле для создания анимации
- * @param {type} renderer
- * @param {type} scene
- * @param {type} camera
- * @param {type} controls
+ * @param {object} renderer
+ * @param {object} scene
+ * @param {object} camera
+ * @param {object} controls
  * @returns {undefined}
  */
 function update(renderer, scene, camera, controls) {
@@ -394,7 +394,7 @@ function init() {
 
     //Создание элементов управления, которые позволяют пользователю перемещать сцену с помощью мыши
     controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.minDistance = 50;
+    controls.minDistance = 30;
     controls.maxDistance = 800;
 
     //Загрузка изображений для фона(background)
@@ -480,26 +480,28 @@ function init() {
     folder3.add(visibleOrbit, 'visible').name('Показать');
     folder3.add(visibleOrbit, 'hidden').name('Скрыть'); 
 
-
+    //слушатели для клика и наведения курсора мыши
     raycaster = new THREE.Raycaster();
     renderer.domElement.addEventListener( 'click', raycast, false );
     renderer.domElement.addEventListener( 'mousemove', raycast2, false );
+
+    window.addEventListener( 'resize', onWindowResize, false );
 
     //Старт анимации
     update(renderer, scene, camera, controls);
 }
 
+//клик мыши по объекту
 function raycast ( e ) {
 
-    //1. sets the mouse position with a coordinate system where the center
-    //   of the screen is the origin
+    //определение позиции курсора мыши в координатной системе, где центр экрана является точкой (0,0)
     mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
 
-    //2. set the picking ray from the camera position and mouse coordinates
+    //соотношение положения камеры и координат курсора мыши
     raycaster.setFromCamera( mouse, camera );    
 
-    //3. compute intersections
+    //вычисляются пересечения
     var intersects = raycaster.intersectObjects( scene.children );
 
     for ( var i = 0; i < intersects.length; i++ ) {
@@ -510,49 +512,37 @@ function raycast ( e ) {
             camera.position.y = intersects[i].object.position.y+20;
             controls.target = intersects[i].object.position;
         }
-        console.log( intersects[ i ] ); 
-        /*
-            An intersection has the following properties :
-                - object : intersected object (THREE.Mesh)
-                - distance : distance from camera to intersection (number)
-                - face : intersected face (THREE.Face3)
-                - faceIndex : intersected face index (number)
-                - point : intersection point (THREE.Vector3)
-                - uv : intersection point in the object's UV coordinates (THREE.Vector2)
-        */
     }
     controls.update();
     renderer.render(scene, camera);
 }
 
+//наведение мыши на объект
 function raycast2 ( e ) {
     descPanel.innerHTML = "";
-    //1. sets the mouse position with a coordinate system where the center
-    //   of the screen is the origin
+
     mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
 
-    //2. set the picking ray from the camera position and mouse coordinates
     raycaster.setFromCamera( mouse, camera );    
 
-    //3. compute intersections
     var intersects = raycaster.intersectObjects( scene.children );
 
     for ( var i = 0; i < intersects.length; i++ ) {
         if(intersects[i].object.type == 'Mesh')
         descPanel.innerHTML = dataArray[intersects[i].object.name];
-        console.log( intersects[ i ] ); 
-        /*
-            An intersection has the following properties :
-                - object : intersected object (THREE.Mesh)
-                - distance : distance from camera to intersection (number)
-                - face : intersected face (THREE.Face3)
-                - faceIndex : intersected face index (number)
-                - point : intersection point (THREE.Vector3)
-                - uv : intersection point in the object's UV coordinates (THREE.Vector2)
-        */
     }
     renderer.render(scene, camera);
+}
+
+//при изменении размеров окна
+function onWindowResize(){
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
 }
 
 //Запуск программы
